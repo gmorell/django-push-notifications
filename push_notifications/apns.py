@@ -56,7 +56,11 @@ def _apns_create_socket(address_tuple, application_id):
 
 
 def _apns_create_socket_to_push(application_id):
-	return _apns_create_socket((SETTINGS["APNS_HOST"], SETTINGS["APNS_PORT"]), application_id)
+	try:
+		host = SETTINGS['APNS_HOSTS'][application_id]
+	except (TypeError, KeyError):
+		host = SETTINGS['APNS_HOST']
+	return _apns_create_socket((host, SETTINGS["APNS_PORT"]), application_id)
 
 
 def _apns_create_socket_to_feedback(application_id):
